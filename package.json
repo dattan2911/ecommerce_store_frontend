@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "proxy": "https://thankful-dove-overalls.cyclic.app/",
+  "proxy": "https://doubtful-pear-chick.cyclic.app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
