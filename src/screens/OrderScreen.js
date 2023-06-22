@@ -306,7 +306,7 @@ export default function OrderScreen() {
                                         {loadingPay && <LoadingBox></LoadingBox>}
                                     </ListGroup.Item>
                                 )}
-                                {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                {userInfo.isAdmin && !order.isDelivered && (
                                     <ListGroup.Item>
                                         {loadingDeliver && <LoadingBox></LoadingBox>}
                                         <div className="d-grid">
