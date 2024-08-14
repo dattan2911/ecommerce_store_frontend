@@ -24,15 +24,6 @@ const reducer = (state, action) => {
             };
         case 'FETCH_FAIL':
             return { ...state, loading: false, error: action.payload };
-        case 'CREATE_REQUEST':
-            return { ...state, loadingCreate: true };
-        case 'CREATE_SUCCESS':
-            return {
-                ...state,
-                loadingCreate: false,
-            };
-        case 'CREATE_FAIL':
-            return { ...state, loadingCreate: false };
         case 'DELETE_REQUEST':
             return { ...state, loadingDelete: true, successDelete: false };
         case 'DELETE_SUCCESS':
@@ -58,7 +49,6 @@ export default function ProductListScreen() {
             error,
             products,
             pages,
-            loadingCreate,
             loadingDelete,
             successDelete,
         },
@@ -79,7 +69,7 @@ export default function ProductListScreen() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { data } = await axios.get(`/api/products/admin?page=${page} `, {
+                const { data } = await axios.get(`https://ecommerce-store-backend-0hhp.onrender.com/api/products/admin?page=${page} `, {
                     headers: { Authorization: `Bearer ${userInfo.token}` },
                 });
 
@@ -93,32 +83,10 @@ export default function ProductListScreen() {
         }
     }, [page, userInfo, successDelete]);
 
-    const createHandler = async () => {
-        if (window.confirm('Are you sure to create?')) {
-            try {
-                dispatch({ type: 'CREATE_REQUEST' });
-                const { data } = await axios.post(
-                    '/api/products',
-                    {},
-                    {
-                        headers: { Authorization: `Bearer ${userInfo.token}` },
-                    }
-                );
-                toast.success('product created successfully');
-                dispatch({ type: 'CREATE_SUCCESS' });
-                navigate(`/admin/product/${data.product._id}`);
-            } catch (err) {
-                toast.error(getError(error));
-                dispatch({
-                    type: 'CREATE_FAIL',
-                });
-            }
-        }
-    };
     const deleteHandler = async (product) => {
         if (window.confirm('Are you sure to delete?')) {
             try {
-                await axios.delete(`/api/products/${product._id}`, {
+                await axios.delete(`https://ecommerce-store-backend-0hhp.onrender.com/api/products/${product._id}`, {
                     headers: { Authorization: `Bearer ${userInfo.token}` },
                 });
                 toast.success('product deleted successfully');
@@ -139,14 +107,12 @@ export default function ProductListScreen() {
                 </Col>
                 <Col className="col text-end">
                     <div>
-                        <Button type="button" onClick={createHandler}>
+                        <Button type="button" onClick={() => navigate(`/admin/createproduct`)}>
                             Create Product
                         </Button>
                     </div>
                 </Col>
             </Row>
-
-            {loadingCreate && <LoadingBox></LoadingBox>}
             {loadingDelete && <LoadingBox></LoadingBox>}
             {loading ? (
                 <LoadingBox></LoadingBox>

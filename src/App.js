@@ -32,6 +32,7 @@ import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
+import CreateProductScreen from './screens/CreateProductScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -41,7 +42,7 @@ function App() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
     localStorage.removeItem('paymentMethod');
-    window.location.href = '/signin';
+    window.location.href = 'https://ecommerce-store-backend-0hhp.onrender.com/signin';
   };
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -49,7 +50,7 @@ function App() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data } = await axios.get(`/api/products/categories`);
+        const { data } = await axios.get(`https://ecommerce-store-backend-0hhp.onrender.com/api/products/categories`);
         setCategories(data);
       } catch (err) {
         toast.error(getError(err));
@@ -208,6 +209,14 @@ function App() {
                   </AdminRoute>
                 }
               ></Route>
+
+              <Route
+                path="/admin/createproduct"
+                element={
+                  <AdminRoute>
+                    <CreateProductScreen />
+                  </AdminRoute>
+                } ></Route>
               <Route
                 path="/admin/product/:id"
                 element={
