@@ -49,7 +49,6 @@ export default function ProductListScreen() {
             error,
             products,
             pages,
-            loadingCreate,
             loadingDelete,
             successDelete,
         },
@@ -114,8 +113,6 @@ export default function ProductListScreen() {
                     </div>
                 </Col>
             </Row>
-
-            {loadingCreate && <LoadingBox></LoadingBox>}
             {loadingDelete && <LoadingBox></LoadingBox>}
             {loading ? (
                 <LoadingBox></LoadingBox>

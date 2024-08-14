@@ -41,7 +41,7 @@ export default function CreateProductScreen() {
     const { userInfo } = state;
     const [{ loading, error, loadingUpdate, loadingUpload }, dispatch] =
         useReducer(reducer, {
-            loading: true,
+            loading: false,
             error: '',
         });
 
@@ -59,7 +59,7 @@ export default function CreateProductScreen() {
         e.preventDefault();
         try {
             dispatch({ type: 'CREATE_REQUEST' });
-            await axios.post(
+            const { data } = await axios.post(
                 `https://ecommerce-store-backend-0hhp.onrender.com/api/products`,
                 {
                     name,
@@ -76,8 +76,10 @@ export default function CreateProductScreen() {
                     headers: { Authorization: `Bearer ${userInfo.token}` },
                 }
             );
+            toast.success('product created successfully');
             dispatch({
                 type: 'CREATE_SUCCESS',
+                payload: data,
             });
             toast.success('Product created successfully');
             navigate('/admin/products');
@@ -224,7 +226,7 @@ export default function CreateProductScreen() {
                     </Form.Group>
                     <div className="mb-3">
                         <Button disabled={loadingUpdate} type="submit">
-                            Update
+                            Create
                         </Button>
                         {loadingUpdate && <LoadingBox></LoadingBox>}
                     </div>
