@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useContext, useReducer, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Store } from '../Store';
 import { getError } from '../utils';
@@ -14,18 +14,12 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'FETCH_REQUEST':
-            return { ...state, loading: true };
-        case 'FETCH_SUCCESS':
-            return { ...state, loading: false };
-        case 'FETCH_FAIL':
-            return { ...state, loading: false, error: action.payload };
-        case 'UPDATE_REQUEST':
-            return { ...state, loadingUpdate: true };
-        case 'UPDATE_SUCCESS':
-            return { ...state, loadingUpdate: false };
-        case 'UPDATE_FAIL':
-            return { ...state, loadingUpdate: false };
+        case 'CREATE_REQUEST':
+            return { ...state, loadingCreate: true };
+        case 'CREATE_SUCCESS':
+            return { ...state, loadingCreate: false };
+        case 'CREATE_FAIL':
+            return { ...state, loadingCreate: false };
         case 'UPLOAD_REQUEST':
             return { ...state, loadingUpload: true, errorUpload: '' };
         case 'UPLOAD_SUCCESS':
@@ -40,10 +34,8 @@ const reducer = (state, action) => {
             return state;
     }
 };
-export default function ProductEditScreen() {
+export default function CreateProductScreen() {
     const navigate = useNavigate();
-    const params = useParams(); // /product/:id
-    const { id: productId } = params;
 
     const { state } = useContext(Store);
     const { userInfo } = state;
@@ -63,38 +55,13 @@ export default function ProductEditScreen() {
     const [brand, setBrand] = useState('');
     const [description, setDescription] = useState('');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                dispatch({ type: 'FETCH_REQUEST' });
-                const { data } = await axios.get(`https://ecommerce-store-backend-0hhp.onrender.com/api/products/${productId}`);
-                setName(data.name);
-                setSlug(data.slug);
-                setPrice(data.price);
-                setImage(data.image);
-                setImages(data.images);
-                setCategory(data.category);
-                setCountInStock(data.countInStock);
-                setBrand(data.brand);
-                setDescription(data.description);
-                dispatch({ type: 'FETCH_SUCCESS' });
-            } catch (err) {
-                dispatch({
-                    type: 'FETCH_FAIL',
-                    payload: getError(err),
-                });
-            }
-        };
-        fetchData();
-    }, [productId]);
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
-            dispatch({ type: 'UPDATE_REQUEST' });
-            await axios.put(
-                `https://ecommerce-store-backend-0hhp.onrender.com/api/products/${productId}`,
+            dispatch({ type: 'CREATE_REQUEST' });
+            await axios.post(
+                `https://ecommerce-store-backend-0hhp.onrender.com/api/products`,
                 {
-                    _id: productId,
                     name,
                     slug,
                     price,
@@ -110,13 +77,13 @@ export default function ProductEditScreen() {
                 }
             );
             dispatch({
-                type: 'UPDATE_SUCCESS',
+                type: 'CREATE_SUCCESS',
             });
-            toast.success('Product updated successfully');
+            toast.success('Product created successfully');
             navigate('/admin/products');
         } catch (err) {
             toast.error(getError(err));
-            dispatch({ type: 'UPDATE_FAIL' });
+            dispatch({ type: 'CREATE_FAIL' });
         }
     };
     const uploadFileHandler = async (e, forImages) => {
@@ -154,9 +121,9 @@ export default function ProductEditScreen() {
     return (
         <Container className="small-container">
             <Helmet>
-                <title>Edit Product ${productId}</title>
+                <title>Create Product</title>
             </Helmet>
-            <h1>Edit Product {productId}</h1>
+            <h1>Create Product </h1>
 
             {loading ? (
                 <LoadingBox></LoadingBox>

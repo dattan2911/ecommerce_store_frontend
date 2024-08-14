@@ -22,7 +22,7 @@ export default function SigninScreen() {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await Axios.post('/api/users/signin', {
+      const { data } = await Axios.post('https://ecommerce-store-backend-0hhp.onrender.com/api/users/signin', {
         email,
         password,
       });
