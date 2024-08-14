@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "proxy": "https://doubtful-pear-chick.cyclic.app",
+  "proxy": "https://ecommerce-store-backend-0hhp.onrender.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
