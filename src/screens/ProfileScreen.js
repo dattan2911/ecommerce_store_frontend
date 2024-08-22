@@ -35,14 +35,21 @@ export default function ProfileScreen() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
     try {
+      dispatch({ type: 'UPDATE_REQUEST' });
+
+      const updateData = {
+        name,
+        email,
+        ...(password && { password }),
+      };
       const { data } = await axios.put(
         'https://ecommerce-store-backend-0hhp.onrender.com/api/users/profile',
-        {
-          name,
-          email,
-          password,
-        },
+        updateData,
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         }
@@ -55,7 +62,7 @@ export default function ProfileScreen() {
       toast.success('User updated successfully');
     } catch (err) {
       dispatch({
-        type: 'FETCH_FAIL',
+        type: 'UPDATE_FAIL',
       });
       toast.error(getError(err));
     }
@@ -76,7 +83,7 @@ export default function ProfileScreen() {
             required
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="name">
+        <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
@@ -92,7 +99,7 @@ export default function ProfileScreen() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="password">
+        <Form.Group className="mb-3" controlId="confirmPassword">
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type="password"
