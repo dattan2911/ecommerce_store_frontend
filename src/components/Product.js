@@ -5,6 +5,7 @@ import Rating from './Rating';
 import axios from 'axios';
 import { useContext } from 'react';
 import { Store } from '../Store';
+import { NavLink } from 'react-bootstrap';
 
 function Product(props) {
   const { product } = props;
@@ -30,12 +31,14 @@ function Product(props) {
   return (
     <Card>
       <Link to={`/product/${product.slug}`}>
-        <img src={product.image} className="card-img-top" alt={product.name} />
+        <div className='product-image-container'>
+          <img src={product.image} className="card-img-top product-image product-image" alt={product.name} />
+        </div>
       </Link>
-      <Card.Body style={{ height: '190px' }}>
-        <Link to={`/product/${product.slug}`}>
-          <Card.Title style={{ height: '48px' }}>{product.name}</Card.Title>
-        </Link>
+      <Card.Body className='item'>
+        <NavLink href={`/product/${product.slug}`}>
+          <Card.Title className='product-name'>{product.name}</Card.Title>
+        </NavLink>
         <Rating rating={product.rating} numReviews={product.numReviews} />
         <Card.Text>${product.price}</Card.Text>
         {product.countInStock === 0 ? (
